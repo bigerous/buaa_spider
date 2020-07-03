@@ -16,3 +16,6 @@ _user = "bigerous@qq.com" #发件邮箱
 _pwd  = "asdfasdfgdsfa"   #授权码
 _to   = "bigerous@qq.com" #收件人
 ```
+运行:
+```
+python3 covid.py 
