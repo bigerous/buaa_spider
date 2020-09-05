@@ -54,7 +54,7 @@ def report(username, password, email):
     myLog.logger.info("upload response: %s" % result)
     now = time.localtime()
     if ('成功' in result or '您已上报过' in result):
-        myLog.logger.info("填报成功！")
+        myLog.logger.info(username + " 填报成功！")
         sendMail( '成功%s 温度上报！'% time.strftime("%Y-%m-%d %H:%M", now), "haha" , email)
         todaySuccess = True
         return True
@@ -68,24 +68,25 @@ if __name__ == "__main__":
         config = yaml.load(f)
     for u in config['users']:
         print(u)
-    for u in config['users']:
-                report(u['username'], u['password'], u['email'])
-
-    # while True:
-    #     while True:
-    #         now = datetime.datetime.now()
-    #         if (now.hour==18):
-    #             break
-    #         myLog.logger.info("tick : %s",now)
-    #         time.sleep(3660 - now.minute * 60 + random.randint(1,120))
-    #     try:
-    #         for u in config['users']:
-    #             report(u['username'], u['password'], u['email'])
-
     
+    # upload once when start 
+    for u in config['users']:
+        try:
+            report(u['username'], u['password'], u['email'])
+        except:
+            myLog.logger.error(u['username'] + '上报失败')
 
-
-
-
-
-
+    while True:
+        while True:
+            now = datetime.datetime.now()
+            if (now.hour==18):
+                break
+            myLog.logger.info("tick : %s",now)
+            time.sleep(3660 - now.minute * 60 + random.randint(1,120))
+        
+        for u in config['users']:
+            try:
+                report(u['username'], u['password'], u['email'])
+            except:
+                myLog.logger.error(u['username'] + '上报失败')
+        
