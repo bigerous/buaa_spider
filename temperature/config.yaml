@@ -1,0 +1,11 @@
+users:
+  - username: cuidajun
+    password: bugaosuoni
+    email: bigerous@qq.com
+  - username: test
+    password: test
+    email: test@ha.com
+
+mail_sender:
+  from: bigerous@qq.com
+  password: hahahha
