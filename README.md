@@ -19,6 +19,7 @@ _to   = "bigerous@qq.com" #收件人
 运行:
 ```
 python3 covid.py 
+```
 
 ## 温度每日上报
 - 每天18：05左右上报
