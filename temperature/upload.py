@@ -72,7 +72,8 @@ if __name__ == "__main__":
     # upload once when start 
     for u in config['users']:
         try:
-            report(u['username'], u['password'], u['email'])
+            if (not report(u['username'], u['password'], u['email'])):
+                myLog.logger.error(u['username'] + '上报失败')  
         except:
             myLog.logger.error(u['username'] + '上报失败')
 
@@ -87,7 +88,8 @@ if __name__ == "__main__":
         
         for u in config['users']:
             try:
-                report(u['username'], u['password'], u['email'])
+                if (not report(u['username'], u['password'], u['email'])):
+                    myLog.logger.error(u['username'] + '上报失败')
             except:
                 myLog.logger.error(u['username'] + '上报失败')
             time.sleep(3600)
