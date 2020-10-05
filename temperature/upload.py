@@ -81,16 +81,24 @@ if __name__ == "__main__":
     while True:
         while True:
             now = datetime.datetime.now()
-            if (now.hour==18):
+            print(now.hour)
+            if (now.hour==19):
                 break
             myLog.logger.info("tick : %s",now)
-            time.sleep(3800 - now.minute * 60 + random.randint(1,120))
+            time.sleep(3660 - now.minute * 60 + random.randint(1,120))
         
-        for u in config['users']:
-            try:
-                if (not report(u['username'], u['password'], u['email'])):
+        with open('config.yaml','r') as f:
+            config = yaml.load(f)
+        success = { x['username'] for x in config['users'] }
+        while len(success):
+            for u in config['users']:
+                try:
+                    if (not report(u['username'], u['password'], u['email'])):
+                        myLog.logger.error(u['username'] + '上报失败')
+                    else:
+                        success.remove(u['username'])
+                except:
                     myLog.logger.error(u['username'] + '上报失败')
-            except:
-                myLog.logger.error(u['username'] + '上报失败')
-            time.sleep(3600)
+            time.sleep(600)
+        time.sleep(3600)
         
