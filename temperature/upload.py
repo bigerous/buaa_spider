@@ -82,7 +82,7 @@ if __name__ == "__main__":
         while True:
             now = datetime.datetime.now()
             print(now.hour)
-            if (now.hour==19):
+            if (now.hour==18):
                 break
             myLog.logger.info("tick : %s",now)
             time.sleep(3660 - now.minute * 60 + random.randint(1,120))
