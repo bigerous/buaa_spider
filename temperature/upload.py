@@ -55,7 +55,12 @@ def report(username, password, email):
     now = time.localtime()
     if ('成功' in result or '您已上报过' in result):
         myLog.logger.info(username + " 填报成功！")
-        sendMail( '成功%s 温度上报！'% time.strftime("%Y-%m-%d %H:%M", now), "haha" , email)
+        try:
+            if '成功' in result and email != '':
+                sendMail( '成功%s 温度上报！'% time.strftime("%Y-%m-%d %H:%M", now), "haha" , email)
+        except Exception as e:
+            myLog.logger.error(username + ' 发送邮件失败')
+
         todaySuccess = True
         return True
     else :
@@ -72,7 +77,7 @@ if __name__ == "__main__":
     # upload once when start 
     for u in config['users']:
         try:
-            if (not report(u['username'], u['password'], u['email'])):
+            if (not report(u['username'], u['password'], u.get('email',''))):
                 myLog.logger.error(u['username'] + '上报失败')  
         except:
             myLog.logger.error(u['username'] + '上报失败')
@@ -89,16 +94,20 @@ if __name__ == "__main__":
         
         with open('config.yaml','r') as f:
             config = yaml.load(f)
-        success = { x['username'] for x in config['users'] }
-        while len(success):
-            for u in config['users']:
+        need = { x for x in range(len(config['users'])) }
+        while len(need):
+            success = set()
+            for index in need:
+                u = config['users'][index]
                 try:
-                    if (not report(u['username'], u['password'], u['email'])):
+                    if (not report(u['username'], u['password'], u.get('email',''))):
                         myLog.logger.error(u['username'] + '上报失败')
                     else:
-                        success.remove(u['username'])
-                except:
-                    myLog.logger.error(u['username'] + '上报失败')
+                        success.add(index)
+                except Exception as e:
+                    myLog.logger.error(u['username'] + '上报失败' + str(e))
+            for x in success:
+                need.remove(x)
             time.sleep(600)
         time.sleep(3600)
         
